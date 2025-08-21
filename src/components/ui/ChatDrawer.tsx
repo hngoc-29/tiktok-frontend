@@ -116,7 +116,7 @@ export default function ChatDrawer({
 
         const data = await res.json();
 
-        if (data.success === false) {
+        if (data.success === false || data.error) {
             toast.error(data.message || "Gửi comment thất bại!");
             return;
         }

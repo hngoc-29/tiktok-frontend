@@ -68,6 +68,7 @@ export default function VideoActions({
                 body: JSON.stringify({ videoId }),
             });
             const data = await res.json();
+            if(data.success===false || data.error) toast.error(data.message);
             if (!ignore) setLiked(data.success ? data.data : false);
         })();
         return () => {

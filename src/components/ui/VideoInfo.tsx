@@ -25,7 +25,7 @@ export default function VideoInfo({ author, title, music }: Props) {
                         src={author?.avatarUrl || "/placeholder-avatar.png"}
                         alt={author?.username}
                     />
-                    <Link href={`/user/${user.username}`}><span className={styles.username}>@{author?.username}</span></Link>
+                    <Link href={`/user/${author.username}`}><span className={styles.username}>@{author?.username}</span></Link>
                 </div>
 
                 <div className={styles.title}>{title}</div>
