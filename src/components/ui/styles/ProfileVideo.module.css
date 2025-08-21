@@ -1,0 +1,45 @@
+.wrapper {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+    position: relative;
+}
+
+.wrapper::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.1);
+    transform: scaleY(0.5);
+    /* mảnh hơn */
+    transform-origin: bottom;
+}
+
+.active {
+    border-bottom: 1px solid #d32f2f;
+    padding: 0 7px;
+}
+
+.grid {
+    margin-top: 8px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 6px;
+}
+
+/* Mobile: 2 cột */
+@media (max-width: 640px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Tablet trở lên: 3 cột */
+@media (min-width: 641px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

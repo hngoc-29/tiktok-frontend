@@ -1,0 +1,66 @@
+.infoWrap {
+    position: absolute;
+    left: 0;
+    right: 80px;
+    /* chừa chỗ sidebar */
+    bottom: 60px;
+    /* chừa chỗ Bottom bar */
+    color: white;
+}
+
+.gradient {
+    position: absolute;
+    inset: 0;
+    height: 120px;
+    bottom: -60px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent 60%);
+    pointer-events: none;
+}
+
+.info {
+    position: relative;
+    padding: 0 12px 0 12px;
+}
+
+.authorLine {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.username {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.followBtn {
+    margin-left: 8px;
+    padding: 2px 10px;
+    border: 1px solid white;
+    background: transparent;
+    color: white;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.title {
+    font-size: 14px;
+    margin: 2px 0 6px;
+}
+
+.music {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    opacity: 0.9;
+}

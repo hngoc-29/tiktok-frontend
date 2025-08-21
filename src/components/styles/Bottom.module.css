@@ -1,0 +1,35 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.icon {
+    font-size: 28px;
+    color: black;
+}
+
+.create {
+    font-size: 28px;
+}
+
+.active {
+    color: white;
+    /* icon + text khi active */
+}
+
+.wt {
+    color: white;
+}

@@ -1,0 +1,101 @@
+.page {
+    padding: 16px;
+    min-height: 100vh;
+    background: #f9f9f9;
+    /* nền sáng */
+    color: #222;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.card {
+    width: 100%;
+    max-width: 480px;
+    /* giới hạn chiều ngang trên mobile/tablet */
+    padding: 20px;
+    border-radius: 20px;
+    background: #fff;
+    display: grid;
+    gap: 18px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* heading */
+.heading {
+    text-align: center;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 20px;
+    color: #333;
+}
+
+/* input text */
+.input {
+    background: #fafafa;
+    border-radius: 10px;
+}
+
+/* nút chọn file */
+.fileBox {
+    width: 100%;
+}
+
+.hiddenInput {
+    display: none;
+}
+
+/* Preview VIDEO (9:16 – dọc như TikTok) */
+.previewVideoWrap {
+    position: relative;
+    width: 100%;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #000;
+    aspect-ratio: 9 / 16;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+}
+
+.previewVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* lấp kín khung dọc */
+}
+
+/* Preview IMAGE (thumbnail) cũng 9:16 */
+.previewImageWrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #f2f2f2;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+}
+
+.previewImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+}
+
+.previewImage:hover {
+    transform: scale(1.02);
+}
+
+/* khu vực actions */
+.actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 10px;
+}
+
+.myButton {
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    /* bỏ in hoa của MUI */
+}

@@ -1,0 +1,58 @@
+.sidebar {
+  background: #1e1e2f;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  transition: width 0.3s;
+  overflow: hidden;
+}
+
+.open {
+  width: 220px;
+}
+
+.closed {
+  width: 60px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.toggle {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.item {
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.item:hover {
+  background: #33334d;
+}
+
+.active {
+  background: #2d2d44;
+}

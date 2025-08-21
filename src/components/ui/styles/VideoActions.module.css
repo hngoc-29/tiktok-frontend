@@ -1,0 +1,59 @@
+.actions {
+    position: absolute;
+    right: 12px;
+    bottom: 100px;
+    /* chừa chỗ cho Bottom bar của bạn */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    color: white;
+}
+
+.action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.action span {
+    margin-top: 4px;
+    font-size: 13px;
+}
+
+.shareModalBackdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    z-index: 10000;
+}
+
+.shareModal {
+    background: #fff;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 12px 12px 0 0;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.shareOption {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.shareOption:hover {
+    background: #f0f0f0;
+}
