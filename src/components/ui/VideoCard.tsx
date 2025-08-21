@@ -78,7 +78,7 @@ export default function VideoCard({ video, author, autoPlayOnView = true }: Prop
                     muted={muted}
                     videoId={video.id}
                     pathVideo={video.path}
-                    isMe={user.id === author.id}
+                    isMe={user?.id === author?.id}
                 />
             </div>
             {!playing && <div className={styles.tapHint}>Tap để phát</div>}
