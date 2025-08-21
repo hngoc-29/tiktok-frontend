@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
+import { toast } from "react-toastify";
 
 interface FollowButtonProps {
     userId: number | null;
@@ -22,6 +23,8 @@ export default function FollowButton({ userId, initialIsFollowing, initialFollow
             body: JSON.stringify({ followingId: userId })
         });
         const data = await res.json();
+
+                    if(data.success===false || data.error) toast.error(data.message);
         if (data.success) {
             setIsFollowing(!isFollowing);
             setFollowers(prev => prev !== null ? prev + (isFollowing ? -1 : 1) : prev);
