@@ -31,11 +31,14 @@ export const metadata: Metadata = {
     "Chia sẻ video",
   ],
   authors: [{ name: "TopTop Team", url: "https://toptopclone.vercel.app" }],
+  verification: {
+    google: "exKzkXXkfCbBRohkUy2ptqVdT9oa8jqNnGSp2cY2m-Y",
+  },
   openGraph: {
     title: "TopTop - TikTok Clone Việt Nam",
     description:
       "Xem, chia sẻ và sáng tạo video ngắn với TopTop - nền tảng video giải trí hàng đầu.",
-    url: "https://toptopclone.vercel.app",
+    url: process.env.BASE_URL,
     siteName: "TopTop",
     images: [
       {
@@ -61,7 +64,6 @@ export const metadata: Metadata = {
   },
 };
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -69,7 +71,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi">
-      <body>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <UserProvider>
           <VideoProvider>
             <CheckDevice>
@@ -84,3 +86,4 @@ export default function RootLayout({
     </html>
   );
 }
+
