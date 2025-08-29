@@ -10,6 +10,7 @@ export default function Feed() {
     const [loading, setLoading] = useState(videos.length === 0);
     const [loadingMore, setLoadingMore] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(scrollIndex || 0);
+    const [muted, setMuted] = useState(true);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const excludeIdsRef = useRef<Set<number>>(new Set(videos.map(v => v.id)));
@@ -109,8 +110,41 @@ export default function Feed() {
     }, [handleScroll]);
 
     if (loading) {
-        return <div style={{ color: "#fff", textAlign: "center" }}>Đang tải...</div>;
+        return (
+            <div
+                style={{
+                    height: "100vh",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    background: "#000",
+                    color: "#fff",
+                    flexDirection: "column",
+                }}
+            >
+                <div
+                    style={{
+                        border: "4px solid rgba(255,255,255,0.2)",
+                        borderTop: "4px solid #fff",
+                        borderRadius: "50%",
+                        width: "48px",
+                        height: "48px",
+                        animation: "spin 1s linear infinite",
+                    }}
+                />
+                <p style={{ marginTop: 16 }}>Đang tải video...</p>
+
+                {/* CSS animation inline */}
+                <style>{`
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            `}</style>
+            </div>
+        );
     }
+
 
     return (
         <div
@@ -124,10 +158,16 @@ export default function Feed() {
                 paddingBottom: 56,
             }}
         >
-            {videos.map((v) => (
+            {videos.map((v, i) => (
                 <div key={v.id} style={{ scrollSnapAlign: "start" }}>
                     {authors[v.userId] ? (
-                        <VideoCard video={v} author={authors[v.userId]} />
+                        <VideoCard
+                            video={v}
+                            author={authors[v.userId]}
+                            muted={muted}
+                            setMuted={setMuted}
+                            isActive={i === currentIndex}   // 👈 thêm
+                        />
                     ) : (
                         <div style={{ color: "#fff" }}>Đang tải user...</div>
                     )}
@@ -135,7 +175,28 @@ export default function Feed() {
             ))}
 
             {loadingMore && (
-                <div style={{ color: "#fff", textAlign: "center" }}>Đang tải thêm...</div>
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: "20px",
+                        color: "#fff",
+                    }}
+                >
+                    <div
+                        style={{
+                            border: "3px solid rgba(255,255,255,0.2)",
+                            borderTop: "3px solid #fff",
+                            borderRadius: "50%",
+                            width: "28px",
+                            height: "28px",
+                            marginRight: "10px",
+                            animation: "spin 1s linear infinite",
+                        }}
+                    />
+                    <span>Đang tải thêm...</span>
+                </div>
             )}
         </div>
     );

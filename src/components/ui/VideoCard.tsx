@@ -5,18 +5,31 @@ import VideoActions from "./VideoActions";
 import VideoInfo from "./VideoInfo";
 import type { User, Video } from "@/type/types";
 import { useUser } from "@/contexts/UserContext";
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 type Props = {
     video: Video;
     author: User;
     autoPlayOnView?: boolean;
+    muted: boolean;
+    setMuted: (m: boolean) => void;
+    isActive: boolean;
 };
 
-export default function VideoCard({ video, author, autoPlayOnView = true }: Props) {
+export default function VideoCard({ video, author, autoPlayOnView = true, muted, setMuted, isActive }: Props) {
     const videoRef = useRef<HTMLVideoElement>(null);
-    const [muted, setMuted] = useState(true);
     const [playing, setPlaying] = useState(true);
-    const { user } = useUser()
+    const { user } = useUser();
+
+    useEffect(() => {
+        if (videoRef.current) {
+            videoRef.current.muted = muted;
+        }
+    }, [muted]);
+
+    const toggleMute = () => {
+        setMuted(!muted);
+    };
 
     useEffect(() => {
         if (!autoPlayOnView || !videoRef.current) return;
@@ -49,12 +62,20 @@ export default function VideoCard({ video, author, autoPlayOnView = true }: Prop
         }
     };
 
-    const toggleMute = () => {
+    useEffect(() => {
         const v = videoRef.current;
         if (!v) return;
-        v.muted = !muted;
-        setMuted(!muted);
-    };
+
+        if (isActive) {
+            v.currentTime = 0;   // 👈 phát lại từ đầu
+            v.play().catch(() => { });
+            setPlaying(true);
+        } else {
+            v.pause();
+            v.currentTime = 0;   // 👈 reset về 0
+            setPlaying(false);
+        }
+    }, [isActive]);
 
     return (
         <div className={styles.card}>
@@ -81,7 +102,23 @@ export default function VideoCard({ video, author, autoPlayOnView = true }: Prop
                     isMe={user?.id === author?.id}
                 />
             </div>
-            {!playing && <div className={styles.tapHint}>Tap để phát</div>}
+
+            {/* 👇 Khi video bị pause, hiển thị icon Play ở giữa */}
+            {!playing && (
+                <div
+                    style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        color: "white",
+                        opacity: 0.8,
+                        pointerEvents: "none", // tránh cản click
+                    }}
+                >
+                    <PlayArrowIcon sx={{ fontSize: 80 }} />
+                </div>
+            )}
         </div>
     );
 }
