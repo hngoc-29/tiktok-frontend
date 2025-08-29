@@ -33,7 +33,7 @@ export async function generateVideoMetadata(path: string): Promise<Metadata> {
             openGraph: {
                 title: `${displayTitle} | TopTop`,
                 description: `${displayTitle} - đăng bởi @${author.username}`,
-                url: `https://toptop.vn/video/${video.path}`,
+                url: `${process.env.BASE_URL}/video/${video.path}`,
                 siteName: "TopTop",
                 images: [
                     {
