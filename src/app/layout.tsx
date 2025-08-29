@@ -31,9 +31,6 @@ export const metadata: Metadata = {
     "Chia sẻ video",
   ],
   authors: [{ name: "TopTop Team", url: "https://toptopclone.vercel.app" }],
-  verification: {
-    google: "exKzkXXkfCbBRohkUy2ptqVdT9oa8jqNnGSp2cY2m-Y",
-  },
   openGraph: {
     title: "TopTop - TikTok Clone Việt Nam",
     description:
@@ -71,6 +68,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi">
+      <head>
+        <meta name="google-site-verification" content="exKzkXXkfCbBRohkUy2ptqVdT9oa8jqNnGSp2cY2m-Y" />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <UserProvider>
           <VideoProvider>
