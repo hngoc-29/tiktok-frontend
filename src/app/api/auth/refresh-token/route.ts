@@ -7,7 +7,7 @@ export async function POST() {
         const refresh_token = await getCookie("refresh_token"); // <-- đúng cookie
 
         if (!refresh_token) {
-            return NextResponse.json({ success: false, message: "No refresh token" }, { status: 401 });
+            return NextResponse.json({ success: false, message: "No refresh token" }, { status: 200 });
         }
 
         const res = await fetch(`${process.env.BACKEND_URL}/auth/refresh-token`, {
@@ -19,7 +19,7 @@ export async function POST() {
         const data = await res.json();
 
         if (!data.success) {
-            return NextResponse.json({ success: false }, { status: 401 });
+            return NextResponse.json({ success: false }, { status: 200 });
         }
 
         // cập nhật cookie mới

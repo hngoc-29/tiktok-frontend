@@ -71,20 +71,34 @@ export default function Feed() {
     }, [scrollIndex]);
 
     // Scroll handler
+    const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
+
     const handleScroll = useCallback(() => {
         if (!containerRef.current) return;
         const { scrollTop, clientHeight } = containerRef.current;
-        const index = Math.round(scrollTop / clientHeight);
-        setCurrentIndex(index);
-        setScrollIndex(index); // lưu scroll index vào context
 
-        if (index === videos.length - 1) {
-            if (readyToLoadRef.current && !loadingRef.current) {
-                fetchVideos();
-            } else {
-                readyToLoadRef.current = true;
+        if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+
+        // chỉ snap sau khi user dừng kéo 100ms
+        scrollTimeout.current = setTimeout(() => {
+            const index = Math.round(scrollTop / clientHeight);
+
+            containerRef.current?.scrollTo({
+                top: index * clientHeight,
+                behavior: "smooth",
+            });
+
+            setCurrentIndex(index);
+            setScrollIndex(index);
+
+            if (index === videos.length - 1) {
+                if (readyToLoadRef.current && !loadingRef.current) {
+                    fetchVideos();
+                } else {
+                    readyToLoadRef.current = true;
+                }
             }
-        }
+        }, 100);
     }, [videos.length, fetchVideos, setScrollIndex]);
 
     useEffect(() => {

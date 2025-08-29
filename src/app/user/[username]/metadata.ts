@@ -31,7 +31,7 @@ export async function generateUserMetadata(username: string): Promise<Metadata> 
             openGraph: {
                 title: `${displayName} (@${data.username}) | TopTop`,
                 description: `Khám phá trang cá nhân của @${data.username}`,
-                url: `https://toptop.vn/${data.username}`,
+                url: `${process.env.BASE_URL}/${data.username}`,
                 siteName: "TopTop",
                 images: [
                     {

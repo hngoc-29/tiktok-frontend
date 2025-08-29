@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
         if (!body.videoId) {
             return NextResponse.json(
                 { success: false, message: "Video không hợp lệ" },
-                { status: 400 }
+                { status: 200 }
             );
         }
 
