@@ -62,21 +62,20 @@ export default function VideoCard({ video, author, autoPlayOnView = true, muted,
         }
     };
 
-    useEffect(() => {
-        const v = videoRef.current;
-        if (!v) return;
+useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
 
-        if (isActive) {
-            v.currentTime = 0;   // 👈 phát lại từ đầu
-            v.play().catch(() => { });
-            setPlaying(true);
-        } else {
-            v.pause();
-            v.currentTime = 0;   // 👈 reset về 0
-            setPlaying(false);
-        }
-    }, [isActive]);
-
+    if (isActive) {
+        v.play().catch(() => {});
+        setPlaying(true);
+    } else {
+        v.pause();
+        v.currentTime = 0;   // 👈 chỉ reset video cũ
+        setPlaying(false);
+    }
+}, [isActive]);
+    
     return (
         <div className={styles.card}>
             <video
