@@ -70,6 +70,7 @@ export default function RootLayout({
     <html lang="vi">
       <head>
         <meta name="google-site-verification" content="exKzkXXkfCbBRohkUy2ptqVdT9oa8jqNnGSp2cY2m-Y" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <UserProvider>
