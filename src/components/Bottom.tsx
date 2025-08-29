@@ -33,7 +33,7 @@ export default function Bottom() {
 
             {/* Create */}
             <Link href="/create">
-                <div className={`${styles.nav}`} style={{ color: pathname === "/" ? "white" : "black" }}>
+                <div className={`${styles.nav}`} style={{ color: pathname === '/' || pathname.includes('video') ? "white" : "black" }}>
                     {pathname === "/create" ? (
                         <AddBoxIcon sx={{ fontSize: 38 }} />
                     ) : (
@@ -44,7 +44,7 @@ export default function Bottom() {
 
             {/* Profile */}
             <Link href="/profile">
-                <div className={styles.nav} style={{ color: pathname === "/" ? "white" : "black" }}>
+                <div className={styles.nav} style={{ color: pathname === '/' || pathname.includes('video') ? "white" : "black" }}>
                     {pathname === "/profile" ? (
                         <PersonIcon sx={{ fontSize: 28 }} />
                     ) : (
