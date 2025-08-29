@@ -15,7 +15,7 @@ export default function Bottom() {
 
     return (
         <div className={styles.wrapper} style={{
-            backgroundColor: pathname === '/' ? 'black' : 'white'
+            backgroundColor: pathname === '/' || pathname.includes('video') ? 'black' : 'white'
         }}>
             {/* Home */}
             <Link href="/">
