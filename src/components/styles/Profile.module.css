@@ -1,5 +1,5 @@
 .wrapper {
-    height: calc(100% - 46px);
+    height: calc(100vh - 46px);
 }
 
 .header {
