@@ -13,6 +13,9 @@
   max-height: 100%;    /* không vượt quá chiều cao màn */
   object-fit: contain; /* giữ nguyên tỷ lệ */
   background: black;   /* phần thừa sẽ là màu đen */
+  position: relative;
+  top: calc(50% - 46px);
+  transform: translateY(-50%);
 }
 
 /* overlay chứa VideoInfo + VideoActions */
