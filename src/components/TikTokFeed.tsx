@@ -9,6 +9,7 @@ export default function Feed() {
     const { videos, setVideos, authors, setAuthors, scrollIndex, setScrollIndex } = useContext(VideoContext);
     const [loading, setLoading] = useState(videos.length === 0);
     const [loadingMore, setLoadingMore] = useState(false);
+    const [hasMore, setHasMore] = useState(true);   // 👈 thêm
     const [currentIndex, setCurrentIndex] = useState(scrollIndex || 0);
     const [muted, setMuted] = useState(true);
 
@@ -19,7 +20,7 @@ export default function Feed() {
 
     // Fetch videos mới
     const fetchVideos = useCallback(async () => {
-        if (loadingRef.current) return;
+        if (loadingRef.current || !hasMore) return; // 👈 nếu hết video thì không fetch nữa
         loadingRef.current = true;
         setLoadingMore(true);
 
@@ -28,7 +29,10 @@ export default function Feed() {
             const res = await fetch(`/api/video/random?limit=10&excludeIds=${excludeIds}`);
             const data = await res.json();
 
-            if (!Array.isArray(data) || data.length === 0) return;
+            if (!Array.isArray(data) || data.length === 0) {
+                setHasMore(false);  // 👈 đánh dấu đã hết video
+                return;
+            }
 
             const users: { [key: number]: User } = { ...authors };
             await Promise.all(
@@ -54,7 +58,7 @@ export default function Feed() {
             loadingRef.current = false;
             readyToLoadRef.current = false;
         }
-    }, [authors, setVideos, setAuthors]);
+    }, [authors, setVideos, setAuthors, hasMore]);
 
     // Load batch đầu tiên nếu context trống
     useEffect(() => {
@@ -80,7 +84,6 @@ export default function Feed() {
 
         if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
 
-        // chỉ snap sau khi user dừng kéo 100ms
         scrollTimeout.current = setTimeout(() => {
             const index = Math.round(scrollTop / clientHeight);
 
@@ -111,49 +114,21 @@ export default function Feed() {
 
     if (loading) {
         return (
-            <div
-                style={{
-                    display: "flex",
-                    position: "fixed",
-                    background: "#000",
-                    color: "#fff",
-                    top: 0,
-                    bottom: 0,
-                    right: 0,
-                    left: 0,
-                    alignItems: "center",
-                    flexDirection: "column",
-                    zIndex: 100,
-                }}
-            >
-                <div
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        marginTop: '280px',
-                    }}
-                >
-                    <div
-                        style={{
-                            border: "4px solid rgba(255,255,255,0.2)",
-                            borderTop: "4px solid #fff",
-                            borderRadius: "50%",
-                            width: "48px",
-                            height: "48px",
-                            animation: "spin 1s linear infinite",
-                        }}
-                    />
+            <div style={{
+                display: "flex", position: "fixed", background: "#000", color: "#fff",
+                top: 0, bottom: 0, right: 0, left: 0, alignItems: "center",
+                flexDirection: "column", zIndex: 100
+            }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: '280px' }}>
+                    <div style={{
+                        border: "4px solid rgba(255,255,255,0.2)",
+                        borderTop: "4px solid #fff",
+                        borderRadius: "50%", width: "48px", height: "48px",
+                        animation: "spin 1s linear infinite"
+                    }} />
                     <p style={{ marginTop: 16 }}>Đang tải video...</p>
                 </div>
-
-                {/* CSS animation inline */}
-                <style>{`
-                @keyframes spin {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(360deg); }
-                }
-            `}</style>
+                <style>{`@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}`}</style>
             </div>
         );
     }
@@ -162,12 +137,8 @@ export default function Feed() {
         <div
             ref={containerRef}
             style={{
-                height: "100vh",
-                width: "100%",
-                overflowY: "scroll",
-                scrollSnapType: "y mandatory",
-                background: "#000",
-                paddingBottom: 56,
+                height: "100vh", width: "100%", overflowY: "scroll",
+                scrollSnapType: "y mandatory", background: "#000", paddingBottom: 56,
             }}
         >
             {videos.map((v, i) => (
@@ -178,7 +149,7 @@ export default function Feed() {
                             author={authors[v.userId]}
                             muted={muted}
                             setMuted={setMuted}
-                            isActive={i === currentIndex}   // 👈 thêm
+                            isActive={i === currentIndex}
                         />
                     ) : (
                         <div style={{ color: "#fff" }}>Đang tải user...</div>
@@ -186,28 +157,56 @@ export default function Feed() {
                 </div>
             ))}
 
-            {loadingMore && (
+            {loadingMore && hasMore && (
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "20px", color: "#fff" }}>
+                    <div style={{
+                        border: "3px solid rgba(255,255,255,0.2)",
+                        borderTop: "3px solid #fff",
+                        borderRadius: "50%", width: "28px", height: "28px",
+                        marginRight: "10px", animation: "spin 1s linear infinite"
+                    }} />
+                    <span>Đang tải thêm...</span>
+                </div>
+            )}
+
+            {!hasMore && (
                 <div
                     style={{
                         display: "flex",
-                        justifyContent: "center",
+                        flexDirection: "column",
                         alignItems: "center",
-                        padding: "20px",
+                        justifyContent: "center",
+                        padding: "40px 20px",
                         color: "#fff",
+                        textAlign: "center",
+                        opacity: 0.8,
                     }}
                 >
                     <div
                         style={{
-                            border: "3px solid rgba(255,255,255,0.2)",
-                            borderTop: "3px solid #fff",
-                            borderRadius: "50%",
-                            width: "28px",
-                            height: "28px",
-                            marginRight: "10px",
-                            animation: "spin 1s linear infinite",
+                            fontSize: "36px",
+                            marginBottom: "12px",
                         }}
-                    />
-                    <span>Đang tải thêm...</span>
+                    >
+                        🎬
+                    </div>
+                    <div
+                        style={{
+                            fontSize: "18px",
+                            fontWeight: "bold",
+                            marginBottom: "8px",
+                        }}
+                    >
+                        Hết video rồi!
+                    </div>
+                    <div
+                        style={{
+                            fontSize: "14px",
+                            color: "#aaa",
+                        }}
+                    >
+                        Hãy quay lại sau để xem thêm nội dung mới nhé 👌
+                    </div>
                 </div>
             )}
         </div>
