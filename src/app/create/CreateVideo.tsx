@@ -43,11 +43,19 @@ export default function CreateVideoPage() {
 
         try {
             setSubmitting(true);
-            const res = await fetch("/api/video/create", {
+            let res = await fetch('/api/get-token');
+            let data = await res.json();
+            if (!data.success) return toast.error('Chưa đăng nhập');
+            const token = data.access_token;
+            res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/video`, {
                 method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    // ❌ KHÔNG set 'Content-Type': 'multipart/form-data' (fetch tự set khi body là FormData)
+                },
                 body: formData,
             });
-            const data = await res.json();
+            data = await res.json();
             if (!res.ok || !data?.success) {
                 throw new Error(data?.message || "Upload thất bại");
             }
