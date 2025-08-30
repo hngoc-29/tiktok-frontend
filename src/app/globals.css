@@ -2,6 +2,15 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  /* Safari/Chrome mobile */
+  -webkit-user-select: none;
+  /* Safari */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE/Edge */
 }
 
 body {

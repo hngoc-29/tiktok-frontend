@@ -113,26 +113,39 @@ export default function Feed() {
         return (
             <div
                 style={{
-                    height: "100vh",
                     display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
+                    position: "fixed",
                     background: "#000",
                     color: "#fff",
+                    top: 0,
+                    bottom: 0,
+                    right: 0,
+                    left: 0,
+                    alignItems: "center",
                     flexDirection: "column",
+                    zIndex: 100,
                 }}
             >
                 <div
                     style={{
-                        border: "4px solid rgba(255,255,255,0.2)",
-                        borderTop: "4px solid #fff",
-                        borderRadius: "50%",
-                        width: "48px",
-                        height: "48px",
-                        animation: "spin 1s linear infinite",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        marginTop: '280px',
                     }}
-                />
-                <p style={{ marginTop: 16 }}>Đang tải video...</p>
+                >
+                    <div
+                        style={{
+                            border: "4px solid rgba(255,255,255,0.2)",
+                            borderTop: "4px solid #fff",
+                            borderRadius: "50%",
+                            width: "48px",
+                            height: "48px",
+                            animation: "spin 1s linear infinite",
+                        }}
+                    />
+                    <p style={{ marginTop: 16 }}>Đang tải video...</p>
+                </div>
 
                 {/* CSS animation inline */}
                 <style>{`
@@ -144,7 +157,6 @@ export default function Feed() {
             </div>
         );
     }
-
 
     return (
         <div
