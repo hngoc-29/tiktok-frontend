@@ -107,9 +107,9 @@ useEffect(() => {
                 <div
                     style={{
                         position: "absolute",
-                        top: "50%",
+                        top: '280px',
                         left: "50%",
-                        transform: "translate(-50%, -50%)",
+                        transform: "translateX(-50%)",
                         color: "white",
                         opacity: 0.8,
                         pointerEvents: "none", // tránh cản click
