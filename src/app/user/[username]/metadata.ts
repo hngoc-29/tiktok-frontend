@@ -4,7 +4,7 @@ interface UserInfo {
     id: number;
     username: string;
     fullname?: string;
-    avatar?: string;
+    avatarUrl?: string;
 }
 
 export async function generateUserMetadata(username: string): Promise<Metadata> {
@@ -31,11 +31,11 @@ export async function generateUserMetadata(username: string): Promise<Metadata> 
             openGraph: {
                 title: `${displayName} (@${data.username}) | TopTop`,
                 description: `Khám phá trang cá nhân của @${data.username}`,
-                url: `${process.env.BASE_URL}/${data.username}`,
+                url: `${process.env.BASE_URL}/user/${data.username}`,
                 siteName: "TopTop",
                 images: [
                     {
-                        url: data.avatar || "/og-image.png",
+                        url: data.avatarUrl || "/og-image.png",
                         width: 400,
                         height: 400,
                         alt: `${displayName} - TopTop`,
@@ -48,7 +48,7 @@ export async function generateUserMetadata(username: string): Promise<Metadata> 
                 card: "summary_large_image",
                 title: `${displayName} (@${data.username}) | TopTop`,
                 description: `Khám phá trang cá nhân của @${data.username}`,
-                images: [data.avatar || "/og-image.png"],
+                images: [data.avatarUrl || "/og-image.png"],
             },
         };
     } catch (err) {
