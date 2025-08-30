@@ -1,3 +1,7 @@
+.wrapper {
+    height: calc(100% - 46px);
+}
+
 .header {
     position: fixed;
     top: 0;
