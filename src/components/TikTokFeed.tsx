@@ -78,7 +78,7 @@ export default function Feed() {
     // Scroll handler
     const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
-    const handleScroll = useCallback(() => {
+const handleScroll = useCallback(() => {
     if (!containerRef.current) return;
     const { scrollTop, clientHeight } = containerRef.current;
 
@@ -87,18 +87,9 @@ export default function Feed() {
     scrollTimeout.current = setTimeout(() => {
         const index = Math.round(scrollTop / clientHeight);
 
-        // ✅ Chỉ snap nếu chưa tới cuối cùng
-        if (index < videos.length - 1) {
-            containerRef.current?.scrollTo({
-                top: index * clientHeight,
-                behavior: "smooth",
-            });
-        }
-
         setCurrentIndex(index);
         setScrollIndex(index);
 
-        // Nếu đang ở cuối, chuẩn bị load thêm video
         if (index === videos.length - 1) {
             if (readyToLoadRef.current && !loadingRef.current) {
                 fetchVideos();
