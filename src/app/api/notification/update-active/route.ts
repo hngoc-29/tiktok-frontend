@@ -14,7 +14,7 @@ export async function PUT(req: NextRequest) {
             );
         }
 
-        const res = await fetch(`${process.env.BACKEND_URL}/notification/update-active/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/notification/update-active/${id}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

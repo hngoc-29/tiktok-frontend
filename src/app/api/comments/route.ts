@@ -16,7 +16,7 @@ export async function GET(req: Request) {
         }
 
         const res = await fetch(
-            `${process.env.BACKEND_URL}/comment/list?videoId=${videoId}&skip=${skip}&take=${take}`
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/comment/list?videoId=${videoId}&skip=${skip}&take=${take}`
         );
         const data = await res.json();
 
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     try {
         const res = await fetch(
-            `${process.env.BACKEND_URL}/comment/create?videoId=${videoId}`,
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/comment/create?videoId=${videoId}`,
             {
                 method: "POST",
                 headers: {
@@ -75,7 +75,7 @@ export async function DELETE(req: Request) {
 
     try {
         const res = await fetch(
-            `${process.env.BACKEND_URL}/comment/delete?commentId=${commentId}`,
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/comment/delete?commentId=${commentId}`,
             {
                 method: "POST",
                 headers: {

@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
         const body: FollowBody = await req.json();
         const token = await getCookie(`access_token`);
 
-        const res = await fetch(`${process.env.BACKEND_URL}/follow/followUser`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/follow/followUser`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

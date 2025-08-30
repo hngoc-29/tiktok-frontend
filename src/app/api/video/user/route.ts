@@ -3,7 +3,7 @@ import { getCookie } from "@/helps/cookie";
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("userId");
-    const res = await fetch(`${process.env.BACKEND_URL}/video/user?userId=${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/video/user?userId=${id}`, {
         method: 'GET',
     });
     const data = await res.json();

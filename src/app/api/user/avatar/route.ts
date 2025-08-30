@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
         }
 
         // forward formData sang backend
-        const res = await fetch(`${process.env.BACKEND_URL}/user`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user`, {
             method: "PUT",
             headers: {
                 'Authorization': `Bearer ${token}`,

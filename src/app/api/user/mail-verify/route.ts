@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
     try {
         const token = await getCookie("access_token");
-        const res = await fetch(`${process.env.BACKEND_URL}/auth/send-verification-email`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/send-verification-email`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,

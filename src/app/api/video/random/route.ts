@@ -6,7 +6,7 @@ export async function GET(req: Request) {
     const n = searchParams.get("n") || "3";
 
     try {
-        const res = await fetch(`${process.env.BACKEND_URL}/video/random?excludeIds=${excludeIds}&n=${n}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/video/random?excludeIds=${excludeIds}&n=${n}`);
         const data = await res.json();
 
         return NextResponse.json(data);

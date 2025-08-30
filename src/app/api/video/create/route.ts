@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, message: "Thiếu dữ liệu" }, { status: 400 });
   }
 
-  const res = await fetch(`${process.env.BACKEND_URL}/video`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/video`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,

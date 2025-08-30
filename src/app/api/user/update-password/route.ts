@@ -6,7 +6,7 @@ export async function PUT(request: Request) {
         const token = await getCookie("access_token");
         const body = await request.json(); // đọc dữ liệu gửi lên (name, password, ...)
 
-        const res = await fetch(`${process.env.BACKEND_URL}/user/update-password`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/update-password`, {
             method: "PUT",
             headers: {
                 "Authorization": `Bearer ${token}`,

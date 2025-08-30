@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
         const token = await getCookie(`access_token`);
 
         const res = await fetch(
-            `${process.env.BACKEND_URL}/notification/get-all`,
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/notification/get-all`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,

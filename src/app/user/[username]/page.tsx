@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: PageProps) {
 export default async function Page({ params }: PageProps) {
     const { username } = await params;
     const token = await getCookie("access_token");
-    let res = await fetch(`${process.env.BACKEND_URL}/user?username=${username}`);
+    let res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user?username=${username}`);
 
     let data = await res.json();
 

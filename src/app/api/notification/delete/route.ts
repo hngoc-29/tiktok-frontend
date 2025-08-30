@@ -13,7 +13,7 @@ export async function DELETE(req: NextRequest) {
             );
         }
 
-        const res = await fetch(`${process.env.BACKEND_URL}/notification/delete/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/notification/delete/${id}`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,

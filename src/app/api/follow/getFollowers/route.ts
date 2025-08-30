@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
         const take = url.searchParams.get("take") || "10";
 
         const res = await fetch(
-            `${process.env.BACKEND_URL}/follow/getFollowers?skip=${skip}&take=${take}`,
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/follow/getFollowers?skip=${skip}&take=${take}`,
             {
                 headers: { 'Authorization': `Bearer ${token}` },
                 cache: 'no-store' // đảm bảo dữ liệu mới

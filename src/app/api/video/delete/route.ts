@@ -4,7 +4,7 @@ export async function POST(request: Request) {
     const { searchParams } = new URL(request.url);
     const videoId = searchParams.get("videoId") || ""
     const token = await getCookie("access_token");
-    const res = await fetch(`${process.env.BACKEND_URL}/video/delete?videoId=${videoId}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/video/delete?videoId=${videoId}`, {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`,

@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
         }
 
         // gọi sang backend NestJS
-        const res = await fetch(`${process.env.BACKEND_URL}/like/video-user?videoId=${body.videoId}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/like/video-user?videoId=${body.videoId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

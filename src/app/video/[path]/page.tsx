@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function page({ params }: PageProps) {
     const { path } = await params;
-    let res = await fetch(`${process.env.BACKEND_URL}/video?path=${path}`);
+    let res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/video?path=${path}`);
     let data = await res.json();
     if (!data.success) {
         return (
@@ -50,7 +50,7 @@ export default async function page({ params }: PageProps) {
         );
     }
     const video = data.video;
-    res = await fetch(`${process.env.BACKEND_URL}/user/info?userId=${video.userId}`);
+    res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/info?userId=${video.userId}`);
     data = await res.json();
     const author = data.user;
     return (

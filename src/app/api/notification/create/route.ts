@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
         const token = await getCookie(`access_token`);
-        const res = await fetch(`${process.env.BACKEND_URL}/notification/create`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/notification/create`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

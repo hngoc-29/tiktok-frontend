@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
     const token = request.headers.get("x-access-token") || await getCookie(`access_token`);
-    const res = await fetch(`${process.env.BACKEND_URL}/user/me`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/me`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -20,7 +20,7 @@ export async function PUT(request: Request) {
         const token = await getCookie("access_token");
         const body = await request.json(); // đọc dữ liệu gửi lên (name, password, ...)
 
-        const res = await fetch(`${process.env.BACKEND_URL}/user`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user`, {
             method: "PUT",
             headers: {
                 "Authorization": `Bearer ${token}`,

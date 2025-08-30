@@ -9,7 +9,7 @@ export async function GET(req: Request) {
     }
 
     try {
-        const res = await fetch(`${process.env.BACKEND_URL}/user/info?userId=${userId}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/info?userId=${userId}`);
         const data = await res.json();
         return NextResponse.json(data);
     } catch (error: unknown) {
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     }
 
     try {
-        const res = await fetch(`${process.env.BACKEND_URL}/user?username=${username}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user?username=${username}`);
         const data = await res.json();
         return NextResponse.json(data);
     } catch (error: unknown) {

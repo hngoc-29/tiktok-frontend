@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const res = await fetch(`${process.env.BACKEND_URL}/notification/active`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/notification/active`, {
       cache: "no-store",
     });
     const data = await res.json();

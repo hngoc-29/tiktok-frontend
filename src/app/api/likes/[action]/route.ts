@@ -15,7 +15,7 @@ export async function POST(
             return NextResponse.json({ success: false, message: "Video không hợp lệ" }, { status: 400 });
         }
 
-        const res = await fetch(`${process.env.BACKEND_URL}/like/${action}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/like/${action}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

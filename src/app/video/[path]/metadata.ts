@@ -3,7 +3,7 @@ import { Video } from "@/type/types";
 
 export async function generateVideoMetadata(path: string): Promise<Metadata> {
     try {
-        const res = await fetch(`${process.env.BACKEND_URL}/video?path=${path}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/video?path=${path}`, {
             cache: "no-store",
         });
         const data = await res.json();
@@ -19,7 +19,7 @@ export async function generateVideoMetadata(path: string): Promise<Metadata> {
 
         // Lấy thông tin tác giả
         const authorRes = await fetch(
-            `${process.env.BACKEND_URL}/user/info?userId=${video.userId}`,
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/info?userId=${video.userId}`,
             { cache: "no-store" }
         );
         const authorData = await authorRes.json();

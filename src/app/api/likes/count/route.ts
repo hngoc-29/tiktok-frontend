@@ -9,7 +9,7 @@ export async function GET(req: Request) {
     }
 
     try {
-        const res = await fetch(`${process.env.BACKEND_URL}/like/count?videoId=${videoId}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/like/count?videoId=${videoId}`);
         const data = await res.json();
 
         return NextResponse.json(data);

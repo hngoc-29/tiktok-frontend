@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
         const skip = url.searchParams.get("skip") || "0";
         const take = url.searchParams.get("take") || "10";
 
-        const res = await fetch(`${process.env.BACKEND_URL}/follow/getFollowing?skip=${skip}&take=${take}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/follow/getFollowing?skip=${skip}&take=${take}`, {
             headers: { 'Authorization': `Bearer ${token}`, },
             cache: 'no-store'
         });
