@@ -1,4 +1,3 @@
-"use client";
 import React, { useRef, useState, useEffect } from "react";
 import styles from "./styles/VideoCard.module.css";
 import VideoActions from "./VideoActions";
@@ -19,6 +18,7 @@ type Props = {
 export default function VideoCard({ video, author, autoPlayOnView = true, muted, setMuted, isActive }: Props) {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [playing, setPlaying] = useState(true);
+    const [progress, setProgress] = useState(0);
     const { user } = useUser();
 
     useEffect(() => {
@@ -62,20 +62,43 @@ export default function VideoCard({ video, author, autoPlayOnView = true, muted,
         }
     };
 
-useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
+    // reset video khi đổi active
+    useEffect(() => {
+        const v = videoRef.current;
+        if (!v) return;
 
-    if (isActive) {
-        v.play().catch(() => {});
-        setPlaying(true);
-    } else {
-        v.pause();
-        v.currentTime = 0;   // 👈 chỉ reset video cũ
-        setPlaying(false);
-    }
-}, [isActive]);
-    
+        if (isActive) {
+            v.play().catch(() => { });
+            setPlaying(true);
+        } else {
+            v.pause();
+            v.currentTime = 0;
+            setProgress(0);
+            setPlaying(false);
+        }
+    }, [isActive]);
+
+    // cập nhật progress khi play
+    useEffect(() => {
+        const v = videoRef.current;
+        if (!v) return;
+        const handleTimeUpdate = () => {
+            const percent = (v.currentTime / v.duration) * 100;
+            setProgress(percent || 0);
+        };
+        v.addEventListener("timeupdate", handleTimeUpdate);
+        return () => v.removeEventListener("timeupdate", handleTimeUpdate);
+    }, []);
+
+    // khi kéo thanh tua
+    const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const v = videoRef.current;
+        if (!v) return;
+        const newTime = (parseFloat(e.target.value) / 100) * v.duration;
+        v.currentTime = newTime;
+        setProgress(parseFloat(e.target.value));
+    };
+
     return (
         <div className={styles.card}>
             <video
@@ -99,10 +122,25 @@ useEffect(() => {
                     videoId={video.id}
                     pathVideo={video.path}
                     isMe={user?.id === author?.id}
+                    title={video.title}
+                    thumbnailUrl={video.thumbnailUrl || ``}
+                />
+                {/* Thanh tua */}
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                    value={progress}
+                    onChange={handleSeek}
+                    className={styles.seekBar}
+                    style={{
+                        background: `linear-gradient(to right, white ${progress}%, rgba(255,255,255,0.3) ${progress}%)`
+                    }}
                 />
             </div>
 
-            {/* 👇 Khi video bị pause, hiển thị icon Play ở giữa */}
+            {/* Icon Play ở giữa khi pause */}
             {!playing && (
                 <div
                     style={{
@@ -112,7 +150,7 @@ useEffect(() => {
                         transform: "translateX(-50%)",
                         color: "white",
                         opacity: 0.8,
-                        pointerEvents: "none", // tránh cản click
+                        pointerEvents: "none",
                     }}
                 >
                     <PlayArrowIcon sx={{ fontSize: 80 }} />

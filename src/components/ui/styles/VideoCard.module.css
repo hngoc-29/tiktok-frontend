@@ -8,14 +8,17 @@
 }
 
 .video {
-  width: 100%;
-  height: auto;
-  max-height: 100%;    /* không vượt quá chiều cao màn */
-  object-fit: contain; /* giữ nguyên tỷ lệ */
-  background: black;   /* phần thừa sẽ là màu đen */
-  position: relative;
-  top: calc(50% - 38px);
-  transform: translateY(-50%);
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    /* không vượt quá chiều cao màn */
+    object-fit: contain;
+    /* giữ nguyên tỷ lệ */
+    background: black;
+    /* phần thừa sẽ là màu đen */
+    position: relative;
+    top: calc(50% - 38px);
+    transform: translateY(-50%);
 }
 
 /* overlay chứa VideoInfo + VideoActions */
@@ -51,4 +54,32 @@
     .overlay {
         padding-bottom: 46px;
     }
+}
+
+.seekBar {
+    width: 95%;
+    margin: 8px auto;
+    appearance: none;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 2px;
+    cursor: pointer;
+    z-index: 9999;
+}
+
+.seekBar::-webkit-slider-thumb {
+    appearance: none;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+}
+
+.seekBar::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: red;
+    cursor: pointer;
 }

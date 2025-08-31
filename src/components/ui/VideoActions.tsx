@@ -10,6 +10,7 @@ import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import EditIcon from "@mui/icons-material/Edit";
 import ChatDrawer from "./ChatDrawer";
 import styles from "./styles/VideoActions.module.css";
 import { toast } from "react-toastify";
@@ -21,6 +22,7 @@ import {
     DialogContentText,
     DialogTitle,
     Button,
+    TextField,
 } from "@mui/material";
 
 type Props = {
@@ -31,6 +33,8 @@ type Props = {
     videoId: number;
     pathVideo: string;
     isMe: boolean;
+    title: string;          // 👈 tiêu đề hiện tại
+    thumbnailUrl?: string;  // 👈 thumbnail hiện tại
 };
 
 export default function VideoActions({
@@ -41,17 +45,24 @@ export default function VideoActions({
     videoId,
     pathVideo,
     isMe,
+    title,
+    thumbnailUrl,
 }: Props) {
     const [liked, setLiked] = useState(false);
-    const [likes, setLikes] = useState(likeCount)
-    const [comments, setComments] = useState(commentCount)
+    const [likes, setLikes] = useState(likeCount);
+    const [comments, setComments] = useState(commentCount);
     const [openChat, setOpenChat] = useState(false);
     const [openShare, setOpenShare] = useState(false);
     const [copied, setCopied] = useState(false);
-    const [openConfirm, setOpenConfirm] = useState(false); // 👈 state cho Dialog
+    const [openConfirm, setOpenConfirm] = useState(false);
+    const [openUpdate, setOpenUpdate] = useState(false);
+
+    const [newTitle, setNewTitle] = useState("");
+    const [newThumb, setNewThumb] = useState<File | null>(null);
+    const [thumbURL, setThumbURL] = useState("");
+
     const router = useRouter();
     const [videoUrl, setVideoUrl] = useState("");
-
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -82,7 +93,7 @@ export default function VideoActions({
             body: JSON.stringify({ videoId }),
         });
         const data = await res.json();
-            if(data.success===false || data.error) toast.error(data.message);
+        if (data.success === false || data.error) toast.error(data.message);
         if (data.success) {
             setLiked(!liked);
             setLikes(path === `remove` ? likes - 1 : likes + 1);
@@ -136,6 +147,37 @@ export default function VideoActions({
         setOpenConfirm(false);
     };
 
+    // Preview thumb mới
+    useEffect(() => {
+        if (!newThumb) return;
+        const url = URL.createObjectURL(newThumb);
+        setThumbURL(url);
+        return () => URL.revokeObjectURL(url);
+    }, [newThumb]);
+
+    const handleUpdate = async () => {
+        const formData = new FormData();
+        formData.append("title", newTitle);
+        formData.append("id", String(videoId));
+        if (newThumb) formData.append("fileThumbnail", newThumb);
+
+        try {
+            const res = await fetch(`/api/video/update`, {
+                method: 'PUT',
+                body: formData
+            });
+            const data = await res.json();
+            if (!res.ok || !data?.success) {
+                throw new Error(data?.message || "Update thất bại");
+            }
+            toast.success("Cập nhật thành công!");
+            setOpenUpdate(false);
+            router.refresh?.();
+        } catch (err) {
+            toast.error((err as Error).message);
+        }
+    };
+
     return (
         <>
             <div className={styles.actions}>
@@ -179,14 +221,30 @@ export default function VideoActions({
                 </div>
 
                 {isMe && (
-                    <div
-                        className={styles.action}
-                        role="button"
-                        onClick={() => setOpenConfirm(true)}
-                    >
-                        <DeleteOutlineIcon sx={{ fontSize: 28, color: "red" }} />
-                        <span>Xóa</span>
-                    </div>
+                    <>
+                        <div
+                            className={styles.action}
+                            role="button"
+                            onClick={() => {
+                                setNewTitle(title);
+                                setThumbURL(thumbnailUrl || "");
+                                setNewThumb(null);
+                                setOpenUpdate(true);
+                            }}
+                        >
+                            <EditIcon sx={{ fontSize: 28, color: "orange" }} />
+                            <span>Sửa</span>
+                        </div>
+
+                        <div
+                            className={styles.action}
+                            role="button"
+                            onClick={() => setOpenConfirm(true)}
+                        >
+                            <DeleteOutlineIcon sx={{ fontSize: 28, color: "red" }} />
+                            <span>Xóa</span>
+                        </div>
+                    </>
                 )}
             </div>
 
@@ -226,7 +284,7 @@ export default function VideoActions({
                 </div>
             )}
 
-            {/* MUI Confirm Dialog */}
+            {/* Confirm Delete */}
             <Dialog open={openConfirm} onClose={() => setOpenConfirm(false)}>
                 <DialogTitle>Xác nhận xóa</DialogTitle>
                 <DialogContent>
@@ -241,6 +299,46 @@ export default function VideoActions({
                     </Button>
                     <Button onClick={confirmDelete} color="error" autoFocus>
                         Xóa
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* Update Video */}
+            <Dialog open={openUpdate} onClose={() => setOpenUpdate(false)} fullWidth>
+                <DialogTitle>Cập nhật video</DialogTitle>
+                <DialogContent
+                    sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
+                >
+                    <TextField
+                        label="Tiêu đề"
+                        value={newTitle}
+                        onChange={(e) => setNewTitle(e.target.value)}
+                        fullWidth
+                    />
+                    <input
+                        accept="image/*"
+                        type="file"
+                        id="updateThumb"
+                        style={{ display: "none" }}
+                        onChange={(e) => setNewThumb(e.target.files?.[0] || null)}
+                    />
+                    <label htmlFor="updateThumb">
+                        <Button variant="outlined" component="span" fullWidth>
+                            {newThumb ? `Đã chọn: ${newThumb.name}` : "Chọn thumbnail mới"}
+                        </Button>
+                    </label>
+                    {(thumbURL || thumbnailUrl) && (
+                        <img
+                            src={thumbURL || thumbnailUrl}
+                            alt="Thumbnail preview"
+                            style={{ width: "100%", borderRadius: 8 }}
+                        />
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenUpdate(false)}>Hủy</Button>
+                    <Button onClick={handleUpdate} variant="contained">
+                        Cập nhật
                     </Button>
                 </DialogActions>
             </Dialog>
