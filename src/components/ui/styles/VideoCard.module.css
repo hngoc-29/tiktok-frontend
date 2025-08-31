@@ -14,7 +14,7 @@
   object-fit: contain; /* giữ nguyên tỷ lệ */
   background: black;   /* phần thừa sẽ là màu đen */
   position: relative;
-  top: calc(50% - 48px);
+  top: calc(50% - 42px);
   transform: translateY(-50%);
 }
 
