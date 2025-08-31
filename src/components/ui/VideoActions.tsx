@@ -307,7 +307,7 @@ export default function VideoActions({
             <Dialog open={openUpdate} onClose={() => setOpenUpdate(false)} fullWidth>
                 <DialogTitle>Cập nhật video</DialogTitle>
                 <DialogContent
-                    sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
+                    sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1, zIndex: 10000 }}
                 >
                     <TextField
                         label="Tiêu đề"
