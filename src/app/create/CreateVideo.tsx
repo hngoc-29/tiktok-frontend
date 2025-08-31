@@ -14,13 +14,12 @@ import {
 import { toast } from "react-toastify";
 
 export default function CreateVideoPage() {
-    const [step, setStep] = useState<1 | 2>(1); // bước hiện tại
+    const [step, setStep] = useState<1 | 2>(1);
     const [title, setTitle] = useState("");
     const [videoFile, setVideoFile] = useState<File | null>(null);
     const [thumbFile, setThumbFile] = useState<File | null>(null);
     const [submitting, setSubmitting] = useState(false);
 
-    // preview URLs
     const videoURL = useMemo(() => (videoFile ? URL.createObjectURL(videoFile) : ""), [videoFile]);
     const thumbURL = useMemo(() => (thumbFile ? URL.createObjectURL(thumbFile) : ""), [thumbFile]);
 
@@ -32,33 +31,51 @@ export default function CreateVideoPage() {
     }, [videoURL, thumbURL]);
 
     const handleSubmit = async () => {
-        if (!videoFile || !thumbFile) {
-            return toast.error(`Thiếu dữ liệu`);
-        }
-
-        const formData = new FormData();
-        formData.append("title", title);
-        formData.append("fileVideo", videoFile);
-        formData.append("fileThumbnail", thumbFile);
+        if (!videoFile || !thumbFile) return toast.error("Thiếu dữ liệu");
 
         try {
             setSubmitting(true);
-            let res = await fetch('/api/get-token');
+
+            // xin token
+            let res = await fetch("/api/get-token");
             let data = await res.json();
-            if (!data.success) return toast.error('Chưa đăng nhập');
+            if (!data.success) return toast.error("Chưa đăng nhập");
             const token = data.access_token;
-            res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/video`, {
+
+            // 👉 B1. Upload video lên Cloudinary unsigned
+            const videoForm = new FormData();
+            videoForm.append("file", videoFile);
+            videoForm.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!);
+
+            res = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/video/upload`, {
                 method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    // ❌ KHÔNG set 'Content-Type': 'multipart/form-data' (fetch tự set khi body là FormData)
-                },
-                body: formData,
+                body: videoForm,
             });
+
+            const videoData = await res.json();
+            if (!res.ok || !videoData.secure_url) {
+                throw new Error(videoData.error?.message || "Upload video thất bại");
+            }
+
+            const videoUrl = videoData.secure_url;
+
+            // 👉 B2. Gửi metadata cho backend để lưu DB
+            const metaForm = new FormData();
+            metaForm.append("title", title);
+            metaForm.append("fileThumbnail", thumbFile);
+            metaForm.append("url", videoUrl);
+
+            res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/video/save`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` },
+                body: metaForm,
+            });
+
             data = await res.json();
             if (!res.ok || !data?.success) {
-                throw new Error(data?.message || "Upload thất bại");
+                throw new Error(data?.message || "Lưu video thất bại");
             }
+
             toast.success("Đăng video thành công 🎉");
             setTitle("");
             setVideoFile(null);
@@ -81,7 +98,6 @@ export default function CreateVideoPage() {
 
                 {step === 1 && (
                     <>
-                        {/* Title */}
                         <TextField
                             label="Tiêu đề"
                             value={title}
@@ -92,7 +108,6 @@ export default function CreateVideoPage() {
                             InputProps={{ className: styles.input }}
                         />
 
-                        {/* Thumbnail picker */}
                         <Box className={styles.fileBox}>
                             <input
                                 id="fileThumb"
@@ -108,7 +123,6 @@ export default function CreateVideoPage() {
                             </label>
                         </Box>
 
-                        {/* Thumbnail preview */}
                         {thumbURL && (
                             <Box className={styles.previewImageWrap}>
                                 <img className={styles.previewImage} src={thumbURL} alt="Thumbnail preview" />
@@ -147,7 +161,6 @@ export default function CreateVideoPage() {
 
                 {step === 2 && (
                     <>
-                        {/* Video picker */}
                         <Box className={styles.fileBox}>
                             <input
                                 id="fileVideo"
@@ -163,7 +176,6 @@ export default function CreateVideoPage() {
                             </label>
                         </Box>
 
-                        {/* Video preview */}
                         {videoURL && (
                             <Box className={styles.previewVideoWrap}>
                                 <video className={styles.previewVideo} src={videoURL} controls playsInline />
