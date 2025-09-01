@@ -25,11 +25,11 @@
 
 .shareModalBackdrop {
     position: fixed;
-    inset: 0;
+    inset: 0; /* 👈 phủ full màn */
     background: rgba(0, 0, 0, 0.3);
     display: flex;
     justify-content: center;
-    align-items: flex-end;
+    align-items: flex-end; /* 👈 modal ở dưới cùng, giống TikTok */
     z-index: 10000;
 }
 

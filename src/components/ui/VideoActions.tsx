@@ -230,9 +230,15 @@ export default function VideoActions({
       {openShare && (
         <div
           className={styles.shareModalBackdrop}
-          onClick={() => setOpenShare(false)}
+          onClick={(e) => {
+            e.stopPropagation();   // ✅ chặn click lan xuống video
+            setOpenShare(false);
+          }}
         >
-          <div className={styles.shareModal} onClick={(e) => e.stopPropagation()}>
+          <div
+            className={styles.shareModal}
+            onClick={(e) => e.stopPropagation()} // chặn click trong modal lan ra backdrop
+          >
             <div className={styles.shareOption} onClick={handleShareFacebook}>
               <FacebookIcon sx={{ fontSize: 28, color: "#1877f2" }} />
               <span>Facebook</span>

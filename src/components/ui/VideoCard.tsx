@@ -211,12 +211,15 @@ export default function VideoCard({
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    spawnHeart(x, y);
     clickCountRef.current += 1;
 
     if (clickTimerRef.current) {
       window.clearTimeout(clickTimerRef.current);
       clickTimerRef.current = null;
+    }
+
+    if (clickCountRef.current > 1) {
+          spawnHeart(x, y);
     }
 
     clickTimerRef.current = window.setTimeout(() => {
