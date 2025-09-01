@@ -36,7 +36,7 @@ type Props = {
   isMe: boolean;
   title: string;
   thumbnailUrl?: string;
-  // new props from parent
+  // new props từ parent
   liked: boolean;
   onToggleLike: () => void;
 };
@@ -230,11 +230,7 @@ export default function VideoActions({
       {openShare && (
         <div
           className={styles.shareModalBackdrop}
-          onClick={(e) => {
-            e.stopPropagation()
-            setOpenShare(false)
-          }
-        }
+          onClick={() => setOpenShare(false)}
         >
           <div className={styles.shareModal} onClick={(e) => e.stopPropagation()}>
             <div className={styles.shareOption} onClick={handleShareFacebook}>
@@ -256,18 +252,14 @@ export default function VideoActions({
       )}
 
       {/* Confirm Delete */}
-      <Dialog open={openConfirm} onClose={(e) => {
-        e.stopPropagation()
-        setOpenConfirm(false)
-      }
-    }>
+      <Dialog open={openConfirm} onClose={() => setOpenConfirm(false)}>
         <DialogTitle>Xác nhận xóa</DialogTitle>
-        <DialogContent>
+        <DialogContent onClick={(e) => e.stopPropagation()}>
           <DialogContentText>
             Bạn có chắc chắn muốn xóa video này? Hành động này không thể hoàn tác.
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions onClick={(e) => e.stopPropagation()}>
           <Button onClick={() => setOpenConfirm(false)} color="inherit">
             Hủy
           </Button>
@@ -278,15 +270,22 @@ export default function VideoActions({
       </Dialog>
 
       {/* Update Video */}
-      <Dialog open={openUpdate} onClose={(e) => {
-        e.stopPropagation()
-        setOpenUpdate(false)
-       }
-       }
-        fullWidth sx={{ zIndex: 10000 }}>
+      <Dialog
+        open={openUpdate}
+        onClose={() => setOpenUpdate(false)}
+        fullWidth
+        sx={{ zIndex: 10000 }}
+      >
         <DialogTitle>Cập nhật video</DialogTitle>
         <DialogContent
-          sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1, zIndex: 10000 }}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            mt: 1,
+            zIndex: 10000,
+          }}
+          onClick={(e) => e.stopPropagation()}
         >
           <TextField
             label="Tiêu đề"
@@ -314,7 +313,7 @@ export default function VideoActions({
             />
           )}
         </DialogContent>
-        <DialogActions>
+        <DialogActions onClick={(e) => e.stopPropagation()}>
           <Button onClick={() => setOpenUpdate(false)}>Hủy</Button>
           <Button onClick={handleUpdate} variant="contained">
             Cập nhật
