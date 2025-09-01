@@ -270,7 +270,7 @@ export default function VideoActions({
       </Dialog>
 
       {/* Update Video */}
-      <Dialog open={openUpdate} onClose={() => setOpenUpdate(false)} fullWidth>
+      <Dialog open={openUpdate} onClose={() => setOpenUpdate(false)} fullWidth sx={{ zIndex: 10000 }}>
         <DialogTitle>Cập nhật video</DialogTitle>
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1, zIndex: 10000 }}

@@ -84,7 +84,7 @@
     cursor: pointer;
 }
 
-/* heart overlay */
+/* heart overlay (multiple hearts supported) */
 .heartOverlay {
   position: absolute;
   width: 96px;
@@ -96,7 +96,7 @@
   justify-content: center;
   animation: heart-pop 0.9s forwards;
   z-index: 1000;
-  color: rgba(255, 82, 82, 1); /* đỏ trái tim */
+  color: rgba(255, 82, 82, 1);
   filter: drop-shadow(0 4px 12px rgba(0,0,0,0.45));
 }
 
