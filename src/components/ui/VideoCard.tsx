@@ -195,6 +195,7 @@ export default function VideoCard({
   // tạo tim mới mỗi click
   const spawnHeart = (x: number, y: number) => {
     const id = Date.now() + Math.floor(Math.random() * 1000);
+    x = x + 40; y = y + 40;
     const newHeart: Heart = { id, x, y };
     setHearts((h) => [...h, newHeart]);
     window.setTimeout(() => {
