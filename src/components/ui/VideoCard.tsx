@@ -100,7 +100,10 @@ export default function VideoCard({ video, author, autoPlayOnView = true, muted,
     };
 
     return (
-        <div className={styles.card}>
+        <div 
+            className={styles.card}
+            onClick={togglePlay}
+            >
             <video
                 ref={videoRef}
                 className={styles.video}
@@ -109,7 +112,6 @@ export default function VideoCard({ video, author, autoPlayOnView = true, muted,
                 playsInline
                 autoPlay
                 muted={muted}
-                onClick={togglePlay}
                 poster={video.thumbnailUrl || undefined}
             />
             <div className={styles.overlay}>
