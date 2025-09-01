@@ -16,7 +16,7 @@ type Props = {
 export default function VideoInfo({ author, title, music }: Props) {
     const { user } = useUser();
     return (
-        <div className={styles.infoWrap}>
+        <div className={styles.infoWrap} onClick={(e) => e.stopPropagation()}>
             <div className={styles.gradient} />
             <div className={styles.info}>
                 <div className={styles.authorLine}>

@@ -180,7 +180,7 @@ export default function VideoActions({
 
     return (
         <>
-            <div className={styles.actions}>
+            <div className={styles.actions} onClick={(e) => e.stopPropagation()}>
                 <div
                     className={styles.action}
                     onClick={() => handleClickLike(liked ? "remove" : "add")}
