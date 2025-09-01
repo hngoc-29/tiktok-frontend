@@ -83,3 +83,39 @@
     background: red;
     cursor: pointer;
 }
+
+/* heart overlay */
+.heartOverlay {
+  position: absolute;
+  width: 96px;
+  height: 96px;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: heart-pop 0.9s forwards;
+  z-index: 1000;
+  color: rgba(255, 82, 82, 1); /* đỏ trái tim */
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.45));
+}
+
+@keyframes heart-pop {
+  0% {
+    transform: translate(-50%, -50%) scale(0.6);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  40% {
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
+}
