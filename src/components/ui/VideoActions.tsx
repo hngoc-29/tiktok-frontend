@@ -230,7 +230,11 @@ export default function VideoActions({
       {openShare && (
         <div
           className={styles.shareModalBackdrop}
-          onClick={() => setOpenShare(false)}
+          onClick={(e) => {
+            e.stopPropagation()
+            setOpenShare(false)
+          }
+        }
         >
           <div className={styles.shareModal} onClick={(e) => e.stopPropagation()}>
             <div className={styles.shareOption} onClick={handleShareFacebook}>
@@ -252,7 +256,11 @@ export default function VideoActions({
       )}
 
       {/* Confirm Delete */}
-      <Dialog open={openConfirm} onClose={() => setOpenConfirm(false)}>
+      <Dialog open={openConfirm} onClose={(e) => {
+        e.stopPropagation()
+        setOpenConfirm(false)
+      }
+    }>
         <DialogTitle>Xác nhận xóa</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -270,7 +278,12 @@ export default function VideoActions({
       </Dialog>
 
       {/* Update Video */}
-      <Dialog open={openUpdate} onClose={() => setOpenUpdate(false)} fullWidth sx={{ zIndex: 10000 }}>
+      <Dialog open={openUpdate} onClose={(e) => {
+        e.stopPropagation()
+        setOpenUpdate(false)
+       }
+       }
+        fullWidth sx={{ zIndex: 10000 }}>
         <DialogTitle>Cập nhật video</DialogTitle>
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1, zIndex: 10000 }}
