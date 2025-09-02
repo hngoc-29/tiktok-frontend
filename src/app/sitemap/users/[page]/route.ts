@@ -5,7 +5,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ page: stri
     let { page } = await params || 10;
     if (!page.includes(".xml")) notFound();
     page = page.substring(0, page.indexOf("."));
-    const pageSize = 5; // giống pageSize trong sitemap.xml
+    const pageSize = 100; // giống pageSize trong sitemap.xml
     const skip = (Number(page) - 1) * pageSize;
     // Gọi API listVideos(skip, take)
     const users = await fetch(
@@ -17,15 +17,15 @@ export async function GET(_: Request, { params }: { params: Promise<{ page: stri
 
     for (const user of users) {
         xml += `<url>
-    <loc>${process.env.BASE_URL}/user/${user.username}</loc>`;
+                                                                    <loc>${process.env.BASE_URL}/user/${user.username}</loc>`;
 
         if (user.updatedAt) {
             xml += `
-    <lastmod>${new Date(user.updatedAt).toISOString()}</lastmod>`;
+                                                                                            <lastmod>${new Date(user.updatedAt).toISOString()}</lastmod>`;
         }
 
         xml += `
-  </url>\n`;
+                                                                                                              </url>\n`;
     }
 
     xml += `</urlset>`;
