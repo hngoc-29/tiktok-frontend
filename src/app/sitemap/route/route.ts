@@ -6,7 +6,7 @@ export async function GET() {
   xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
   // Danh sách route muốn sitemap
-  const routes = ['', 'create', '/profile'];
+  const routes = ['', 'create', 'profile'];
 
   // Thêm các route vào sitemap
   xml += routes
