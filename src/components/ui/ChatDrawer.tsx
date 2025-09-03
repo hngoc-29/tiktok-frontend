@@ -15,11 +15,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useUser } from "@/contexts/UserContext";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 interface User {
     id: number;
     fullname: string;
     avatarUrl?: string;
+    username?: string;
 }
 
 interface Comment {
@@ -32,6 +34,7 @@ interface Comment {
 interface ChatDrawerProps {
     open: boolean;
     onClose: () => void;
+    authorId: number;
     videoId: number;
     commentCount: number;
     setCommentCount: Dispatch<SetStateAction<number>>;
@@ -43,6 +46,7 @@ export default function ChatDrawer({
     open,
     onClose,
     videoId,
+    authorId,
     commentCount,
     setCommentCount
 }: ChatDrawerProps) {
@@ -74,7 +78,7 @@ export default function ChatDrawer({
             const res = await fetch(
                 `/api/comments?videoId=${videoId}&skip=${skipValue}&take=${TAKE}`
             );
-            const data: Comment[] = await res.json();
+            const data: Comment[] = await res.json();console.log(data)
 
             if (data.length < TAKE) {
                 setHasMore(false); // không còn dữ liệu nữa
@@ -152,136 +156,168 @@ export default function ChatDrawer({
     };
 
     return (
-        <div onClick={(e) => e.stopPropagation()}>
-            <Drawer
-                anchor="right"
-                open={open}
-                onClose={onClose}
-                PaperProps={{
-                    sx: { width: 360, bgcolor: "#111", color: "#fff" },
-                }}
-                ModalProps={{
-                    disableEnforceFocus: true,
-                    disableAutoFocus: true,
-                    keepMounted: true,
-                }}
+        <div onClick={(e) => e.stopPropagation()} style={{
+            zIndex: 10000,
+        }}>
+  <Drawer
+    anchor="right"
+    open={open}
+    onClose={onClose}
+    PaperProps={{
+      sx: { width: 360, bgcolor: "#111", color: "#fff" },
+    }}
+    ModalProps={{
+      disableEnforceFocus: true,
+      disableAutoFocus: true,
+      keepMounted: true,
+    }}
+  >
+    <Box p={2} display="flex" flexDirection="column" height="100%">
+      {/* Header */}
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+        <Typography variant="h6">💬 Bình luận</Typography>
+        <IconButton onClick={onClose} sx={{ color: "#fff" }}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
+
+      {/* Danh sách comment */}
+      <Box
+        ref={listRef}
+        flex={1}
+        onScroll={handleScroll}
+        sx={{
+          overflowY: "auto",
+          border: "1px solid rgba(255,255,255,0.1)",
+          borderRadius: 2,
+          p: 1,
+          mb: 2,
+          zIndex: 10000
+        }}
+      >
+        {comments.length === 0 && !loading ? (
+          <Typography variant="body2" sx={{ opacity: 0.6 }}>
+            Chưa có bình luận nào.
+          </Typography>
+        ) : (
+          comments.map((cmt, idx) => (
+            <Box
+              key={idx}
+              display="flex"
+              gap={1.5}
+              mb={2}
+              sx={{ alignItems: "flex-start" }}
             >
-                <Box p={2} display="flex" flexDirection="column" height="100%">
-                    {/* Header */}
-                    <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                        <Typography variant="h6">💬 Bình luận</Typography>
-                        <IconButton onClick={onClose} sx={{ color: "#fff" }}>
-                            <CloseIcon />
-                        </IconButton>
-                    </Box>
-
-                    {/* Danh sách comment */}
-                    <Box
-                        ref={listRef}
-                        flex={1}
-                        onScroll={handleScroll}
-                        sx={{
-                            overflowY: "auto",
-                            border: "1px solid rgba(255,255,255,0.1)",
-                            borderRadius: 2,
-                            p: 1,
-                            mb: 2,
-                        }}
-                    >
-                        {comments.length === 0 && !loading ? (
-                            <Typography variant="body2" sx={{ opacity: 0.6 }}>
-                                Chưa có bình luận nào.
-                            </Typography>
-                        ) : (
-                            comments.map((cmt, idx) => (
-                                <Box
-                                    key={idx}
-                                    display="flex"
-                                    gap={1.5}
-                                    mb={2}
-                                    sx={{ alignItems: "flex-start" }}
-                                >
-                                    <Avatar
-                                        src={cmt?.user?.avatarUrl || "/default-avatar.png"}
-                                        sx={{ width: 32, height: 32 }}
-                                    />
-                                    <Box flex={1}>
-                                        <Box display="flex" justifyContent="space-between" alignItems="center">
-                                            <Box>
-                                                <Typography variant="subtitle2">{cmt?.user?.fullname}</Typography>
-                                                <Typography
-                                                    variant="caption"
-                                                    sx={{ opacity: 0.6 }}
-                                                >
-                                                    {new Date(cmt.createdAt).toLocaleString()}
-                                                </Typography>
-                                            </Box>
-
-                                            {Number(cmt?.user?.id) === Number(currentUserId) && (
-                                                <IconButton
-                                                    size="small"
-                                                    onClick={() => handleDelete(cmt.id)}
-                                                    sx={{ color: "rgba(255,255,255,0.6)" }}
-                                                >
-                                                    <DeleteOutlineIcon fontSize="small" />
-                                                </IconButton>
-                                            )}
-                                        </Box>
-
-                                        <Typography
-                                            variant="body2"
-                                            sx={{
-                                                mt: 0.5,
-                                                bgcolor: "rgba(255,255,255,0.08)",
-                                                p: 1,
-                                                borderRadius: 1,
-                                            }}
-                                        >
-                                            {cmt?.content}
-                                        </Typography>
-                                    </Box>
-                                </Box>
-                            ))
-                        )}
-
-                        {/* Loading spinner */}
-                        {loading && (
-                            <Box display="flex" justifyContent="center" p={2}>
-                                <CircularProgress size={24} sx={{ color: "#fff" }} />
-                            </Box>
-                        )}
-
-                        {!hasMore && comments.length > 0 && (
-                            <Typography variant="body2" align="center" sx={{ opacity: 0.5, mt: 1 }}>
-                                Đã tải hết bình luận.
-                            </Typography>
-                        )}
-                    </Box>
-
-                    {/* Input chat */}
-                    <Box display="flex" gap={1}>
-                        <TextField
-                            fullWidth
-                            size="small"
-                            value={message}
-                            onChange={e => setMessage(e.target.value)}
-                            placeholder="Viết bình luận..."
-                            variant="outlined"
-                            sx={{
-                                input: { color: "#fff" },
-                                fieldset: { borderColor: "rgba(255,255,255,0.2)" },
-                            }}
-                        />
-                        <Button
-                            variant="contained"
-                            onClick={handleSend}
-                            sx={{ bgcolor: "#ff0050", "&:hover": { bgcolor: "#e60045" } }}
+                <Link href={`/user/${cmt?.user?.username}`}>
+              <Avatar
+                src={cmt?.user?.avatarUrl || "/default-avatar.png"}
+                sx={{ width: 32, height: 32 }}
+              />
+              </Link>
+              <Box flex={1}>
+                <Box display="flex" justifyContent="space-between" alignItems="center">
+                  <Box>
+                    <Box display="flex" alignItems="center" gap={0.5}>
+                      <Link href={`/user/${cmt?.user?.username}`}>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                        {cmt?.user?.fullname}
+                      </Typography>
+</Link>
+                      {Number(cmt?.user?.id) === Number(authorId) && (
+                        <Box
+                          component="span"
+                          sx={{
+                            px: 0.6,
+                            py: 0.2,
+                            borderRadius: "4px",
+                            bgcolor: "#ff0050",
+                            color: "#fff",
+                            fontSize: "0.7rem",
+                            fontWeight: 500,
+                          }}
                         >
-                            Gửi
-                        </Button>
+                          Tác giả
+                        </Box>
+                      )}
                     </Box>
+
+                    <Typography
+                      variant="caption"
+                      sx={{ opacity: 0.6 }}
+                    >
+                      {new Date(cmt.createdAt).toLocaleString()}
+                    </Typography>
+                  </Box>
+
+                  {Number(cmt?.user?.id) === Number(currentUserId) && (
+                    <IconButton
+                      size="small"
+                      onClick={() => handleDelete(cmt.id)}
+                      sx={{ color: "rgba(255,255,255,0.6)" }}
+                    >
+                      <DeleteOutlineIcon fontSize="small" />
+                    </IconButton>
+                  )}
                 </Box>
-            </Drawer>
-        </div>
+
+                <Typography
+                  variant="body2"
+                  sx={{
+                    mt: 0.5,
+                    bgcolor:
+                      Number(cmt?.user?.id) === Number(authorId)
+                        ? "rgba(255,0,80,0.15)" // nền khác cho tác giả
+                        : "rgba(255,255,255,0.08)",
+                    p: 1,
+                    borderRadius: 1,
+                  }}
+                >
+                  {cmt?.content}
+                </Typography>
+              </Box>
+            </Box>
+          ))
+        )}
+
+        {/* Loading spinner */}
+        {loading && (
+          <Box display="flex" justifyContent="center" p={2}>
+            <CircularProgress size={24} sx={{ color: "#fff" }} />
+          </Box>
+        )}
+
+        {!hasMore && comments.length > 0 && (
+          <Typography variant="body2" align="center" sx={{ opacity: 0.5, mt: 1 }}>
+            Đã tải hết bình luận.
+          </Typography>
+        )}
+      </Box>
+
+      {/* Input chat */}
+      <Box display="flex" gap={1}>
+        <TextField
+          fullWidth
+          size="small"
+          value={message}
+          onChange={e => setMessage(e.target.value)}
+          placeholder="Viết bình luận..."
+          variant="outlined"
+          sx={{
+            input: { color: "#fff" },
+            fieldset: { borderColor: "rgba(255,255,255,0.2)" },
+          }}
+        />
+        <Button
+          variant="contained"
+          onClick={handleSend}
+          sx={{ bgcolor: "#ff0050", "&:hover": { bgcolor: "#e60045" } }}
+        >
+          Gửi
+        </Button>
+      </Box>
+    </Box>
+  </Drawer>
+</div>
+
     );
 }

@@ -261,6 +261,7 @@ export default function VideoCard({
           commentCount={video.commentCount}
           onToggleMute={toggleMute}
           muted={muted}
+          authorId={author.id}
           videoId={video.id}
           pathVideo={video.path}
           isMe={user?.id === author?.id}

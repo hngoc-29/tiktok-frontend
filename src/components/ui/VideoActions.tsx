@@ -31,6 +31,7 @@ type Props = {
   commentCount: number;
   onToggleMute: () => void;
   muted: boolean;
+  authorId: number;
   videoId: number;
   pathVideo: string;
   isMe: boolean;
@@ -46,6 +47,7 @@ export default function VideoActions({
   commentCount,
   onToggleMute,
   muted,
+  authorId,
   videoId,
   pathVideo,
   isMe,
@@ -221,6 +223,7 @@ export default function VideoActions({
       <ChatDrawer
         open={openChat}
         onClose={() => setOpenChat(false)}
+        authorId={authorId}
         videoId={videoId}
         commentCount={comments}
         setCommentCount={setComments}
